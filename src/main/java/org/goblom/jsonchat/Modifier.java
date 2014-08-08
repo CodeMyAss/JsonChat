@@ -18,6 +18,7 @@
 
 package org.goblom.jsonchat;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -32,8 +33,8 @@ public abstract class Modifier {
     private final String plugin;
     
     public Modifier(Plugin plugin, String lookFor, String description) {
-        this.lookFor = lookFor;
-        this.description = description;
+        this.lookFor = ChatColor.stripColor(lookFor);
+        this.description = ChatColor.stripColor(description);
         this.plugin = plugin.getName();
     }
     
