@@ -35,6 +35,13 @@ class TooltipDefaults {
             }
         });
         
+        JSONChat.registerModifier(new Modifier(plugin, "uuid", "Show uuid of the player") {
+            @Override
+            public String onModify(Player player) {
+                return player.getUniqueId().toString();
+            }
+        });
+        
         JSONChat.registerModifier(new Modifier(plugin, "xp", "Shows current xp of the player") {
             @Override
             public String onModify(Player player) {
