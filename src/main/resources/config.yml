@@ -1,4 +1,4 @@
 Name-Format: '<{name}> '
 Tooltip:
-- 'XP: [xp]'
-- 'Health: [health]'
+- 'XP: {xp}'
+- 'Health: {health}'
