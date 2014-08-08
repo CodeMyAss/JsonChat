@@ -19,11 +19,16 @@
 package org.goblom.jsonchat;
 
 import com.google.common.collect.Lists;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,11 +51,33 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(this, this);
         
+        PluginCommand cmd = getCommand("jsonchat");
+                      cmd.setDescription("Lists all registered Modifiers and their description");
+                      cmd.setExecutor(this);
+                      cmd.setAliases(Arrays.asList("js"));
+                      cmd.setUsage("/jsonchat");
+                      cmd.setPermission("jsonchat.list");
+                      cmd.setPermissionMessage(ChatColor.RED + "You do not have permission to list the Modifiers.");
+                      
         try {
             TooltipDefaults.load(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Collection<Modifier> list = JSONChat.getRegisteredModifiers();
+        sender.sendMessage(ChatColor.GOLD + "=========================");
+        sender.sendMessage(ChatColor.GREEN + "JSONChat Modifiers");
+        sender.sendMessage(ChatColor.GOLD + "=========================");
+        
+        for (Modifier mod : list) {
+            sender.sendMessage(ChatColor.AQUA + "- " + ChatColor.GRAY + "{" + mod.getLookingFor() + "} " + ChatColor.AQUA + "-- " + ChatColor.GRAY + mod.getDescription());
+        }
+        
+        return true;
     }
     
     @EventHandler
