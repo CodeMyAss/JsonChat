@@ -41,7 +41,7 @@ public class ModifierOutput {
         return player;
     }
     
-    public List<String> getTooltip() {
+    public List<String> getOutput() {
         return this.tooltip;
     }
     

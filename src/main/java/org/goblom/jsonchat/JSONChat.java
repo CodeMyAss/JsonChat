@@ -70,12 +70,18 @@ public class JSONChat {
         ModifierOutput output = new ModifierOutput(player);
                 
         for (String line : tooltip) {
-            for (String key : MODIFIERS.keySet()) {
-                if (line.contains(key)) {
-                    Modifier mod = MODIFIERS.get(key);
-                    output.tooltip.add(line.replace(key, mod.onModify(player)));
-                    output.usedModifiers.add(mod);
-                }
+            modifyLine(output, line);
+        }
+        
+        return output;
+    }
+
+    protected static ModifierOutput modifyLine(ModifierOutput output, String str) {
+        for (String key : MODIFIERS.keySet()) {
+            if (str.contains(key)) {
+                Modifier mod = MODIFIERS.get(key);
+                output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
+                output.usedModifiers.add(mod);
             }
         }
         

@@ -75,8 +75,9 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     private String getNameFormat(Player player) {
         String str = getConfig().getString("Name-Format");
+        String name = ChatColor.translateAlternateColorCodes('&', str).replace("{name}", player.getName());
         
-        return ChatColor.translateAlternateColorCodes('&', str).replace("{name}", player.getName());
+        return JSONChat.modifyLine(new ModifierOutput(player), name).getOutput().get(0);
     }
     
     private void run(AsyncJsonPlayerChatEvent event, ModifierOutput output) {
@@ -84,7 +85,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         
         if (!event.isCancelled()) {
             FancyMessage message = new FancyMessage(getNameFormat(event.getPlayer()));
-                         message.tooltip(output.getTooltip());
+                         message.tooltip(output.getOutput());
                          message.then(event.getMessage());
                          
             send(message, event.getRecipients());
