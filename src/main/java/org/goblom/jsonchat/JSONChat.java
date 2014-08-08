@@ -82,6 +82,8 @@ public class JSONChat {
                 Modifier mod = MODIFIERS.get(key);
                 output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
                 output.usedModifiers.add(mod);
+            } else {
+                output.tooltip.add(str);
             }
         }
         
