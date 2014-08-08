@@ -28,6 +28,13 @@ import org.bukkit.plugin.Plugin;
 class TooltipDefaults {
     
     public static void load(Plugin plugin) throws Exception {
+        JSONChat.registerModifier(new Modifier(plugin, "name", "Show name of the player") {
+            @Override
+            public String onModify(Player player) {
+                return player.getName();
+            }
+        });
+        
         JSONChat.registerModifier(new Modifier(plugin, "xp", "Shows current xp of the player") {
             @Override
             public String onModify(Player player) {

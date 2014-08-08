@@ -75,7 +75,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     private String getNameFormat(Player player) {
         String str = getConfig().getString("Name-Format");
-        String name = ChatColor.translateAlternateColorCodes('&', str).replace("{name}", player.getName());
+        String name = ChatColor.translateAlternateColorCodes('&', str);
         
         return JSONChat.modifyLine(new ModifierOutput(player), name).getOutput().get(0);
     }
