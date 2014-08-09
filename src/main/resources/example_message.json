@@ -1,0 +1,17 @@
+{
+  "text": "", 
+  "extra": [
+    {
+      "color": "white", 
+      "text": "<Goblom> ", 
+      "hoverEvent": {
+        "action": "show_text", 
+        "value": "XP: 0.5294118\nHealth: 20.0"
+      }
+    }, 
+    {
+      "color": "white", 
+      "text": "message goes here" 
+    }
+  ]
+}
