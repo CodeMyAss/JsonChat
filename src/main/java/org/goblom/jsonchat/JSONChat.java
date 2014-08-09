@@ -66,7 +66,7 @@ public class JSONChat {
         return Collections.unmodifiableCollection(MODIFIERS.values());
     }
     
-    public static ModifierOutput modify(Player player, List<String> tooltip) {
+    protected static ModifierOutput modify(Player player, List<String> tooltip) {
         ModifierOutput output = new ModifierOutput(player);
                 
         for (String line : tooltip) {
