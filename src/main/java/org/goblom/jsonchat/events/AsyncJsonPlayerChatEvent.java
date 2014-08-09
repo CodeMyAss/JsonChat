@@ -34,7 +34,7 @@ public class AsyncJsonPlayerChatEvent extends Event implements Cancellable {
     private final Player who;
     private boolean cancel = false;
     private final Set<Player> recipients;
-    private final String message;
+    private String message;
     
     @Override
     public HandlerList getHandlers() { return handlers; }
@@ -56,6 +56,10 @@ public class AsyncJsonPlayerChatEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
+    }
+    
+    public void setMessage(String message) {
+        this.message = message;
     }
     
     public Player getPlayer() {
