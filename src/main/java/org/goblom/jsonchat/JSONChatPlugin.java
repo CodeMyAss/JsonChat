@@ -175,15 +175,15 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         
         obj.put("color", "white");
         obj.put("text", getNameFormat(player));
-        obj.put("hoverEvent", hoverEvent("show_text", tooltip));
+        obj.put("hoverEvent", event("show_text", listToLines(tooltip)));
         
         return obj;
     }
     
-    private JSONObject hoverEvent(String action, List<String> lines) {
+    private JSONObject event(String action, String value) {
         JSONObject obj = new JSONObject();
         obj.put("action", action);
-        obj.put("value", listToLines(lines));
+        obj.put("value", value);
         return obj;
     }
 }
