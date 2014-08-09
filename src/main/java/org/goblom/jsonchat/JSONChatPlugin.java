@@ -44,7 +44,7 @@ import org.goblom.jsonchat.libs.net.amoebaman.util.Reflection;
  */
 public class JSONChatPlugin extends JavaPlugin implements Listener {
     //Work this into the plugin later
-    protected static final Pattern CHAT_PATTERN = Pattern.compile("(?<=[)(.*?)(?=])");
+    protected static final Pattern CHAT_PATTERN = Pattern.compile("(?<=\\{)(.*?)(?=\\})");
     
     @Override
     public void onEnable() {
