@@ -61,7 +61,19 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
                       cmd.setPermissionMessage(ChatColor.RED + "You do not have permission to list the JSONChat Modifiers.");
                       
         try {
-            TooltipDefaults.load(this);
+            JSONChat.registerModifier(new ChatModifier(this, "name", "Show name of the player") {
+                @Override
+                public String onModify(Player player) {
+                    return player.getName();
+                }
+            });
+
+            JSONChat.registerModifier(new ChatModifier(this, "uuid", "Show uuid of the player") {
+                @Override
+                public String onModify(Player player) {
+                    return player.getUniqueId().toString();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
