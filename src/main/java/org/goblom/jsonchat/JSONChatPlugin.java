@@ -58,7 +58,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
                       cmd.setAliases(Arrays.asList("js"));
                       cmd.setUsage("/jsonchat");
                       cmd.setPermission("jsonchat.list");
-                      cmd.setPermissionMessage(ChatColor.RED + "You do not have permission to list the Modifiers.");
+                      cmd.setPermissionMessage(ChatColor.RED + "You do not have permission to list the JSONChat Modifiers.");
                       
         try {
             TooltipDefaults.load(this);
@@ -69,14 +69,22 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Collection<Modifier> list = JSONChat.getRegisteredModifiers();
-        sender.sendMessage(ChatColor.GOLD + "=========================");
-        sender.sendMessage(ChatColor.GREEN + "JSONChat Modifiers");
-        sender.sendMessage(ChatColor.GOLD + "=========================");
+        Collection<Modifier> l = JSONChat.getRegisteredModifiers();
+        Modifier[] mods = l.toArray(new Modifier[l.size()]);
+                
+        FancyMessage message = new FancyMessage(ChatColor.GREEN + "Chat Modifiers: ");
         
-        for (Modifier mod : list) {
-            sender.sendMessage(ChatColor.AQUA + "- " + ChatColor.GRAY + "{" + mod.getLookingFor() + "} " + ChatColor.AQUA + "-- " + ChatColor.GRAY + mod.getDescription());
+        for (int i = 0; i < mods.length; i++) {
+            Modifier mod = mods[i];
+            message.then(ChatColor.AQUA + "{" + mod.getLookingFor() + "}");
+            message.tooltip(ChatColor.DARK_PURPLE + "Plugin: " + ChatColor.GRAY + mod.getProvidingPlugin(),
+                            ChatColor.DARK_PURPLE + "Description: " + ChatColor.GRAY + mod.getDescription());
+            if (!isLast(mods, i)) {
+                message.then(ChatColor.WHITE + ", ");
+            }
         }
+        
+        message.send(sender);
         
         return true;
     }
@@ -154,6 +162,10 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     private boolean isLast(List list, int index) {
         return (list.size() - 1) == index;
+    }
+    
+    private boolean isLast(Object[] array, int index) {
+        return (array.length - 1) == index;
     }
     
     //not finished
