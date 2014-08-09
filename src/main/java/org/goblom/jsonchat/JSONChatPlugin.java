@@ -37,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.goblom.jsonchat.events.AsyncJsonPlayerChatEvent;
 import org.goblom.jsonchat.libs.fanciful.FancyMessage;
 import org.goblom.jsonchat.libs.net.amoebaman.util.Reflection;
+import org.json.simple.JSONObject;
 
 /**
  * @todo Add a command to show all registered modifiers and descriptions
@@ -131,5 +132,46 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    //******************************************
+    //*** To Move away from Fanciful, but not yet
+    //******************************************
+    private String listToLines(List<String> list) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < list.size(); i++) {
+            String line = list.get(i);
+            sb.append(line);
+            
+            if (!isLast(list, i)) {
+                sb.append('\n');
+            }
+        }
+        
+        return sb.toString();
+    }
+    
+    private boolean isLast(List list, int index) {
+        return (list.size() - 1) == index;
+    }
+    
+    //not finished
+    @Deprecated
+    private JSONObject toJsonMessage(Player player, List<String> tooltip, String message) {
+        JSONObject obj = new JSONObject();
+        
+        obj.put("color", "white");
+        obj.put("text", getNameFormat(player));
+        obj.put("hoverEvent", hoverEvent("show_text", tooltip));
+        
+        return obj;
+    }
+    
+    private JSONObject hoverEvent(String action, List<String> lines) {
+        JSONObject obj = new JSONObject();
+        obj.put("action", action);
+        obj.put("value", listToLines(lines));
+        return obj;
     }
 }
