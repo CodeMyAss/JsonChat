@@ -85,7 +85,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         Collection<ChatModifier> l = JSONChat.getRegisteredModifiers();
         ChatModifier[] mods = l.toArray(new ChatModifier[l.size()]);
                 
-        FancyMessage message = new FancyMessage(ChatColor.GREEN + "Chat Modifiers: ");
+        FancyMessage message = new FancyMessage(ChatColor.GREEN + "Chat Modifiers (" + mods.length +"): ");
         
         for (int i = 0; i < mods.length; i++) {
             ChatModifier mod = mods[i];
