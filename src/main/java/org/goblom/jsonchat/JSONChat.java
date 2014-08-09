@@ -77,16 +77,19 @@ public class JSONChat {
     }
 
     protected static ModifierOutput modifyLine(ModifierOutput output, String str) {
+        boolean added = false;
         for (String key : MODIFIERS.keySet()) {
             if (str.contains(key)) {
                 Modifier mod = MODIFIERS.get(key);
                 output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
                 output.usedModifiers.add(mod);
-            } else {
-                output.tooltip.add(str);
+                added = true;
             }
         }
         
+        if (!added) {
+            output.tooltip.add(str);
+        }
         return output;
     }
 }
