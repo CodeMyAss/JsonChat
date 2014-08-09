@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.goblom.jsonchat.exceptions.InvalidModifierException;
@@ -34,6 +35,7 @@ import org.goblom.jsonchat.exceptions.ModifierNotFoundException;
  */
 public class JSONChat {
     private static final Map<String, ChatModifier> MODIFIERS = Maps.newHashMap();
+    private static final Map<UUID, ChatablePlayer> PLAYERS = Maps.newHashMap();
     private static final JSONChatPlugin PLUGIN = JavaPlugin.getPlugin(JSONChatPlugin.class);
     
     public static ChatModifier getModifier(String lookFor) throws ModifierNotFoundException {
@@ -91,5 +93,18 @@ public class JSONChat {
             output.tooltip.add(str);
         }
         return output;
+    }
+    
+    public static ChatablePlayer getChatable(Player player) {
+        if (PLAYERS.containsKey(player.getUniqueId())) {
+            return PLAYERS.get(player.getUniqueId());
+        }
+        
+        ChatablePlayer cp = new ChatablePlayer(player);
+                       cp.setCustomTooltip(PLUGIN.getToolTip());
+                       cp.setCustomNameFormat(PLUGIN.getNameFormat());
+                       
+        PLAYERS.put(player.getUniqueId(), cp);
+        return cp;
     }
 }

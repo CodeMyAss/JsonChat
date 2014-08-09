@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.goblom.jsonchat.events.AsyncJsonPlayerChatEvent;
 import org.goblom.jsonchat.libs.fanciful.FancyMessage;
@@ -103,14 +104,15 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        event.setCancelled(true);
-        
-        ModifierOutput output = JSONChat.modify(event.getPlayer(), getToolTip());
-        AsyncJsonPlayerChatEvent ajpce = new AsyncJsonPlayerChatEvent(event.getPlayer(), event.getMessage(), event.getRecipients());
-        run(ajpce, output);
+        JSONChat.getChatable(event.getPlayer()).handle(event);
     }
     
-    private List<String> getToolTip() {
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        JSONChat.getChatable(event.getPlayer());
+    }
+    
+    protected List<String> getToolTip() {
         List<String> list = getConfig().getStringList("Tooltip");
         List<String> newList = Lists.newArrayList();
         
@@ -121,26 +123,11 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         return newList;
     }
     
-    private String getNameFormat(Player player) {
-        String str = getConfig().getString("Name-Format");
-        String name = ChatColor.translateAlternateColorCodes('&', str);
-        
-        return JSONChat.modifyLine(new ModifierOutput(player), name).getOutput().get(0);
+    protected String getNameFormat() {
+        return getConfig().getString("Name-Format");
     }
     
-    private void run(AsyncJsonPlayerChatEvent event, ModifierOutput output) {
-        Bukkit.getPluginManager().callEvent(event);
-        
-        if (!event.isCancelled()) {
-            FancyMessage message = new FancyMessage(getNameFormat(event.getPlayer()));
-                         message.tooltip(output.getOutput());
-                         message.then(event.getMessage());
-                         
-            send(message, event.getRecipients());
-        }
-    }
-    
-    private void send(FancyMessage message, Set<Player> recipients) {
+    protected static void send(FancyMessage message, Set<Player> recipients) {
         try {
             Object packet = message.createChatPacket(message.toJSONString());
 
@@ -155,7 +142,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     }
     
     //******************************************
-    //*** To Move away from Fanciful, but not yet
+    //*** To prepare to move away from Fanciful, but not yet
     //******************************************
     private String listToLines(List<String> list) {
         StringBuilder sb = new StringBuilder();
@@ -178,24 +165,5 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     private boolean isLast(Object[] array, int index) {
         return (array.length - 1) == index;
-    }
-    
-    //not finished
-    @Deprecated
-    private JSONObject toJsonMessage(Player player, List<String> tooltip, String message) {
-        JSONObject obj = new JSONObject();
-        
-        obj.put("color", "white");
-        obj.put("text", getNameFormat(player));
-        obj.put("hoverEvent", event("show_text", listToLines(tooltip)));
-        
-        return obj;
-    }
-    
-    private JSONObject event(String action, String value) {
-        JSONObject obj = new JSONObject();
-        obj.put("action", action);
-        obj.put("value", value);
-        return obj;
     }
 }
