@@ -41,19 +41,5 @@ class TooltipDefaults {
                 return player.getUniqueId().toString();
             }
         });
-        
-        JSONChat.registerModifier(new Modifier(plugin, "xp", "Shows current xp of the player") {
-            @Override
-            public String onModify(Player player) {
-                return String.valueOf(player.getExp());
-            }
-        });
-        
-        JSONChat.registerModifier(new Modifier(plugin, "health", "Shows current health of the player") {
-            @Override
-            public String onModify(Player player) {
-                return String.valueOf(player.getHealth());
-            }
-        });
     }
 }

@@ -1,4 +1,3 @@
 Name-Format: '<{name}> '
 Tooltip:
-- 'XP: {xp}'
-- 'Health: {health}'
+- 'UUID: {uuid}'
