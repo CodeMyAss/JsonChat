@@ -26,13 +26,13 @@ import org.bukkit.plugin.Plugin;
  *
  * @author Goblom
  */
-public abstract class Modifier {
+public abstract class ChatModifier {
     
     private final String lookFor;
     private final String description;
     private final String plugin;
     
-    public Modifier(Plugin plugin, String lookFor, String description) {
+    public ChatModifier(Plugin plugin, String lookFor, String description) {
         this.lookFor = ChatColor.stripColor(lookFor);
         this.description = ChatColor.stripColor(description);
         this.plugin = plugin.getName();

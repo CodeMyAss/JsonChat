@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
  */
 public class ModifierOutput {
     protected List<String> tooltip;
-    protected List<Modifier> usedModifiers;
+    protected List<ChatModifier> usedModifiers;
     private Player player;
     
     ModifierOutput(Player player) {
@@ -45,7 +45,7 @@ public class ModifierOutput {
         return this.tooltip;
     }
     
-    public List<Modifier> getUsedModifiers() {
+    public List<ChatModifier> getUsedModifiers() {
         return this.usedModifiers;
     }
 }

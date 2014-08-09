@@ -69,13 +69,13 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Collection<Modifier> l = JSONChat.getRegisteredModifiers();
-        Modifier[] mods = l.toArray(new Modifier[l.size()]);
+        Collection<ChatModifier> l = JSONChat.getRegisteredModifiers();
+        ChatModifier[] mods = l.toArray(new ChatModifier[l.size()]);
                 
         FancyMessage message = new FancyMessage(ChatColor.GREEN + "Chat Modifiers: ");
         
         for (int i = 0; i < mods.length; i++) {
-            Modifier mod = mods[i];
+            ChatModifier mod = mods[i];
             message.then(ChatColor.AQUA + "{" + mod.getLookingFor() + "}");
             message.tooltip(ChatColor.DARK_PURPLE + "Plugin: " + ChatColor.GRAY + mod.getProvidingPlugin(),
                             ChatColor.DARK_PURPLE + "Description: " + ChatColor.GRAY + mod.getDescription());

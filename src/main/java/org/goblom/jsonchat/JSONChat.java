@@ -33,10 +33,10 @@ import org.goblom.jsonchat.exceptions.ModifierNotFoundException;
  * @author Goblom
  */
 public class JSONChat {
-    private static final Map<String, Modifier> MODIFIERS = Maps.newHashMap();
+    private static final Map<String, ChatModifier> MODIFIERS = Maps.newHashMap();
     private static final JSONChatPlugin PLUGIN = JavaPlugin.getPlugin(JSONChatPlugin.class);
     
-    public static Modifier getModifier(String lookFor) throws ModifierNotFoundException {
+    public static ChatModifier getModifier(String lookFor) throws ModifierNotFoundException {
         if (MODIFIERS.containsKey(lookFor)) {
             return MODIFIERS.get(lookFor);
         }
@@ -44,7 +44,7 @@ public class JSONChat {
         throw new ModifierNotFoundException(lookFor);
     }
     
-    public static void registerModifier(Modifier mod) throws InvalidModifierException {
+    public static void registerModifier(ChatModifier mod) throws InvalidModifierException {
         if (mod.getLookingFor().isEmpty()) {
             throw new InvalidModifierException("Invalid search pattern for Modifier " + mod.getClass().getSimpleName());
         }
@@ -62,7 +62,7 @@ public class JSONChat {
         }
     }
     
-    public static Collection<Modifier> getRegisteredModifiers() {
+    public static Collection<ChatModifier> getRegisteredModifiers() {
         return Collections.unmodifiableCollection(MODIFIERS.values());
     }
     
@@ -80,7 +80,7 @@ public class JSONChat {
         boolean added = false;
         for (String key : MODIFIERS.keySet()) {
             if (str.contains(key)) {
-                Modifier mod = MODIFIERS.get(key);
+                ChatModifier mod = MODIFIERS.get(key);
                 output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
                 output.usedModifiers.add(mod);
                 added = true;
