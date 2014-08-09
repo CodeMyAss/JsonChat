@@ -76,11 +76,11 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         
         for (int i = 0; i < mods.length; i++) {
             ChatModifier mod = mods[i];
-            message.then(ChatColor.AQUA + "{" + mod.getLookingFor() + "}");
+            message.then("{" + mod.getLookingFor() + "}").color(ChatColor.AQUA);
             message.tooltip(ChatColor.DARK_PURPLE + "Plugin: " + ChatColor.GRAY + mod.getProvidingPlugin(),
                             ChatColor.DARK_PURPLE + "Description: " + ChatColor.GRAY + mod.getDescription());
             if (!isLast(mods, i)) {
-                message.then(ChatColor.WHITE + ", ");
+                message.then(", ").color(ChatColor.WHITE);
             }
         }
         
