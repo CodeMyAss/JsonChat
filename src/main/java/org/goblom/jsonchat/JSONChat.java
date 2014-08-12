@@ -81,12 +81,14 @@ public class JSONChat {
     protected static ModifierOutput modifyLine(ModifierOutput output, String str) {
         boolean added = false;
         for (String key : MODIFIERS.keySet()) {
-            if (str.contains(key)) {
-                ChatModifier mod = MODIFIERS.get(key);
-                output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
-                output.usedModifiers.add(mod);
-                added = true;
-            }
+            try {
+                if (str.contains(key)) {
+                    ChatModifier mod = MODIFIERS.get(key);
+                    output.tooltip.add(str.replace(key, mod.onModify(output.getPlayer())));
+                    output.usedModifiers.add(mod);
+                    added = true;
+                }
+            } catch (Exception e) { e.printStackTrace(); }
         }
         
         if (!added) {
