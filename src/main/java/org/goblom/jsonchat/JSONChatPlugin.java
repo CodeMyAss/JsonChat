@@ -18,7 +18,6 @@
 
 package org.goblom.jsonchat;
 
-import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,10 +34,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.goblom.jsonchat.events.AsyncJsonPlayerChatEvent;
 import org.goblom.jsonchat.libs.fanciful.FancyMessage;
 import org.goblom.jsonchat.libs.net.amoebaman.util.Reflection;
-import org.json.simple.JSONObject;
 
 /**
  * @todo Add a command to show all registered modifiers and descriptions
@@ -47,10 +44,12 @@ import org.json.simple.JSONObject;
 public class JSONChatPlugin extends JavaPlugin implements Listener {
     //Work this into the plugin later
     protected static final Pattern CHAT_PATTERN = Pattern.compile("(?<=\\{)(.*?)(?=\\})");
+    private Configuration config;
     
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        config = new Configuration(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         
         PluginCommand cmd = getCommand("jsonchat");
@@ -85,7 +84,7 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         Collection<ChatModifier> l = JSONChat.getRegisteredModifiers();
         ChatModifier[] mods = l.toArray(new ChatModifier[l.size()]);
                 
-        FancyMessage message = new FancyMessage(ChatColor.GREEN + "Chat Modifiers (" + mods.length +"): ");
+        FancyMessage message = new FancyMessage("Chat Modifiers (" + mods.length +"): ").color(ChatColor.GREEN);
         
         for (int i = 0; i < mods.length; i++) {
             ChatModifier mod = mods[i];
@@ -112,21 +111,6 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         JSONChat.getChatable(event.getPlayer());
     }
     
-    protected List<String> getToolTip() {
-        List<String> list = getConfig().getStringList("Tooltip");
-        List<String> newList = Lists.newArrayList();
-        
-        for (String line : list) {
-            newList.add(ChatColor.translateAlternateColorCodes('&', line));
-        }
-        
-        return newList;
-    }
-    
-    protected String getNameFormat() {
-        return getConfig().getString("Name-Format");
-    }
-    
     protected static void send(FancyMessage message, Set<Player> recipients) {
         try {
             Object packet = message.createChatPacket(message.toJSONString());
@@ -139,6 +123,10 @@ public class JSONChatPlugin extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    protected Configuration getConfiguration() {
+        return config;
     }
     
     //******************************************

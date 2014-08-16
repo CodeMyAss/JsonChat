@@ -19,13 +19,16 @@
 package org.goblom.jsonchat;
 
 import com.google.common.collect.Lists;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.getByChar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.goblom.jsonchat.events.AsyncFancyMessageSendEvent;
 import org.goblom.jsonchat.events.AsyncJsonPlayerChatEvent;
 import org.goblom.jsonchat.libs.fanciful.FancyMessage;
@@ -35,6 +38,7 @@ import org.goblom.jsonchat.libs.fanciful.FancyMessage;
  * @author Goblom
  */
 public class ChatablePlayer {
+    private static final JSONChatPlugin PLUGIN = JavaPlugin.getPlugin(JSONChatPlugin.class);
     
     private final UUID uuid;
     private List<String> tooltip;
@@ -43,14 +47,12 @@ public class ChatablePlayer {
     ChatablePlayer(Player player) {
         this.uuid = player.getUniqueId();
         this.tooltip = Lists.newArrayList();
-        this.nameFormat = "<{name}> ";
     }
     
     public final UUID getUniqueId() {
         return this.uuid;
     }
     
-    //Tooltip parser is handled in chat(String, Set<Player>)
     public List<String> getTooltip() {
         return this.tooltip;
     }
@@ -60,8 +62,7 @@ public class ChatablePlayer {
             return this.nameFormat;
         }
         
-        String str = ChatColor.translateAlternateColorCodes('&', this.nameFormat);
-        return JSONChat.modifyLine(new ModifierOutput(getBukkit()), str).getOutput().get(0);
+        return JSONChat.modifyLine(new ModifierOutput(getBukkit()), this.nameFormat).getOutput().get(0);
     }
     
     public void setCustomTooltip(List<String> tooltip) {
@@ -96,12 +97,67 @@ public class ChatablePlayer {
         Bukkit.getPluginManager().callEvent(event);
         
         if (!event.isCancelled()) {
-            FancyMessage message = new FancyMessage(player.getNameFormat());
-                         message.tooltip(output.getOutput());
-                         message.then(event.getMessage());
+            FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', player.getNameFormat()));
+                         message.tooltip(colorList(output.getOutput()));
+            
+            //parse the message
+            for (String word : event.getMessage().split(" ")) {
+                try {
+                    new URL(word);
+                    if (PLUGIN.getConfiguration().getSetting("Format-URL")) {
+                        message.then("link").style(ChatColor.UNDERLINE);
+                        message.tooltip(word);
+                        message.link(word);
+                    } else {
+                        message.then(word).link(word);
+                    }
+                } catch (Exception e) {
+                    message.then(word);
+                }
+                
+                message.color(getLastColor(word));
+                message.then(" ");
+            }
                          
-                         Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message));
+            Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message));
             JSONChatPlugin.send(message, event.getRecipients());
         }
+    }
+    
+    protected static List<String> colorList(List<String> list) {
+        List<String> newList = Lists.newArrayList();
+        
+        for (String line : list) {
+            newList.add(ChatColor.translateAlternateColorCodes('&', line));
+        }
+        
+        return newList;
+    }
+    
+    /**
+     * Modified from
+     * @see ChatColor#getLastColors(java.lang.String) 
+     */
+    protected static ChatColor getLastColor(String input) {
+        int length = input.length();
+
+        // Search backwards from the end as it is faster
+        for (int index = length - 1; index > -1; index--) {
+            char section = input.charAt(index);
+            if (section == ChatColor.COLOR_CHAR && index < length - 1) {
+                char c = input.charAt(index + 1);
+                ChatColor color = getByChar(c);
+
+                if (color != null) {
+
+                    // Once we find a color or reset we can stop searching
+                    if (color.isColor()) {
+                        return color;
+                    }
+                }
+            }
+        }
+
+        return ChatColor.WHITE;
     }
 }

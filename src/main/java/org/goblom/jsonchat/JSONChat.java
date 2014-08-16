@@ -103,8 +103,8 @@ public class JSONChat {
         }
         
         ChatablePlayer cp = new ChatablePlayer(player);
-                       cp.setCustomTooltip(PLUGIN.getToolTip());
-                       cp.setCustomNameFormat(PLUGIN.getNameFormat());
+                       cp.setCustomTooltip(PLUGIN.getConfiguration().getTooltip(false));
+                       cp.setCustomNameFormat(PLUGIN.getConfiguration().getNameFormat(false));
                        
         PLAYERS.put(player.getUniqueId(), cp);
         return cp;
