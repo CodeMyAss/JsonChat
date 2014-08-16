@@ -2,6 +2,7 @@ main: org.goblom.jsonchat.JSONChatPlugin
 name: JSONChat
 version: 1.0
 author: Goblom
+load: startup
 
 commands:
   jsonchat:
