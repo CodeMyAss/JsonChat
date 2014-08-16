@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.goblom.jsonchat.events.AsyncFancyMessageSendEvent;
 import org.goblom.jsonchat.events.AsyncJsonPlayerChatEvent;
 import org.goblom.jsonchat.libs.fanciful.FancyMessage;
 
@@ -99,6 +100,7 @@ public class ChatablePlayer {
                          message.tooltip(output.getOutput());
                          message.then(event.getMessage());
                          
+                         Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message));
             JSONChatPlugin.send(message, event.getRecipients());
         }
     }
