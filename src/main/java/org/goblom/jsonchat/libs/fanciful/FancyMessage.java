@@ -825,4 +825,8 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
         }
         return returnVal;
     }
+    
+    public MessagePart getMessagePart(int index) {
+        return this.messageParts.get(index);
+    }
 }

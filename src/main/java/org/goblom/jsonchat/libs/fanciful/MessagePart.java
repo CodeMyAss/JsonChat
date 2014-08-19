@@ -15,13 +15,13 @@ import com.google.common.collect.ImmutableBiMap;
 /**
  * Internal class: Represents a component of a JSON-serializable {@link FancyMessage}.
  */
-final class MessagePart implements JsonRepresentedObject, ConfigurationSerializable, Cloneable {
+public final class MessagePart implements JsonRepresentedObject, ConfigurationSerializable, Cloneable {
 
-	ChatColor color = ChatColor.WHITE;
-	ArrayList<ChatColor> styles = new ArrayList<ChatColor>();
-	String clickActionName = null, clickActionData = null,
+	public ChatColor color = ChatColor.WHITE;
+	public ArrayList<ChatColor> styles = new ArrayList<ChatColor>();
+	public String clickActionName = null, clickActionData = null,
 			hoverActionName = null;
-	JsonRepresentedObject hoverActionData = null;
+	public JsonRepresentedObject hoverActionData = null;
 	TextualComponent text = null;
 
 	MessagePart(final TextualComponent text){
