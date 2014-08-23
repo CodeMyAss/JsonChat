@@ -118,9 +118,10 @@ public class ChatablePlayer {
                 message.color(getLastColor(word));
                 message.then(" ");
             }
-                         
-            Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message, event.getRecipients()));
-            JSONChatPlugin.send(message, event.getRecipients());
+            
+            AsyncFancyMessageSendEvent afmse = new AsyncFancyMessageSendEvent(player.getBukkit(), message, event.getRecipients());
+            Bukkit.getPluginManager().callEvent(afmse);
+            JSONChatPlugin.send(message, afmse.getRecipients());
         }
     }
     
