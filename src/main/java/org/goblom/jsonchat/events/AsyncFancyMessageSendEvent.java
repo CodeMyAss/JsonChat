@@ -18,6 +18,7 @@
 
 package org.goblom.jsonchat.events;
 
+import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -41,8 +42,9 @@ public class AsyncFancyMessageSendEvent extends Event {
 
     private final FancyMessage message;
     private final Player chat;
+    private Set<Player> recipients;
     
-    public AsyncFancyMessageSendEvent(Player player, FancyMessage message) {
+    public AsyncFancyMessageSendEvent(Player player, FancyMessage message, Set<Player> recipients) {
         super(true);
         this.chat = player;
         this.message = message;
@@ -54,5 +56,9 @@ public class AsyncFancyMessageSendEvent extends Event {
     
     public Player getSender() {
         return this.chat;
+    }
+    
+    public Set<Player> getRecipients() {
+        return this.recipients;
     }
 }

@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import static org.bukkit.ChatColor.getByChar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -100,16 +99,17 @@ public class ChatablePlayer {
             FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', player.getNameFormat()));
                          message.tooltip(colorList(output.getOutput()));
             
-            //parse the message
+            //parse the meage
             for (String word : event.getMessage().split(" ")) {
+                String clean = ChatColor.stripColor(word);
                 try {
-                    new URL(word);
+                    new URL(clean);
                     if (PLUGIN.getConfiguration().getSetting("Format-URL")) {
                         message.then("link").style(ChatColor.UNDERLINE);
                         message.tooltip(word);
-                        message.link(word);
+                        message.link(clean);
                     } else {
-                        message.then(word).link(word);
+                        message.then(word).link(clean);
                     }
                 } catch (Exception e) {
                     message.then(word);
@@ -119,7 +119,7 @@ public class ChatablePlayer {
                 message.then(" ");
             }
                          
-            Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message));
+            Bukkit.getPluginManager().callEvent(new AsyncFancyMessageSendEvent(player.getBukkit(), message, event.getRecipients()));
             JSONChatPlugin.send(message, event.getRecipients());
         }
     }
@@ -146,7 +146,7 @@ public class ChatablePlayer {
             char section = input.charAt(index);
             if (section == ChatColor.COLOR_CHAR && index < length - 1) {
                 char c = input.charAt(index + 1);
-                ChatColor color = getByChar(c);
+                ChatColor color = ChatColor.getByChar(c);
 
                 if (color != null) {
 
